@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valentine's Day Surprise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @keyframes heartbeat {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .heartbeat {
+        animation: heartbeat 1s infinite;
+      }
+    </style>
+  </head>
+  <body
+    class="h-screen flex items-center justify-center"
+    style="
+      background-image: url('/images/wp.webp');
+      background-size: cover;
+      background-position: center;
+    "
+  >
+    <div id="container" class="max-w-md w-full">
+      <div
+        id="envelope"
+        class="relative w-64 h-48 mx-auto cursor-pointer transform transition-all duration-500 ease-in-out hover:scale-105"
+      >
+        <div class="absolute inset-0 bg-white rounded-b-lg"></div>
+        <div
+          id="flap"
+          class="absolute top-0 left-0 w-full h-full transition-all duration-500 ease-in-out z-10 origin-top"
+        >
+          <div
+            class="w-0 h-0 border-l-[128px] border-r-[128px] border-t-[96px] border-l-transparent border-r-transparent border-t-white"
+            style="filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2))"
+          ></div>
+        </div>
+        <div class="absolute inset-x-0 bottom-0 h-1/2 rounded-b-lg"></div>
+        <div class="absolute inset-0 flex items-center justify-center z-10">
+          <svg
+            class="w-12 h-12 text-white heartbeat"
+            fill="red"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+      </div>
+
+      <div
+        id="click-to-open"
+        class="left-0 right-0 text-center text-gray-600 text-md font-semibold mt-5"
+      >
+        Click to Open
+      </div>
+
+      <div id="message" class="hidden mt-8 p-6 bg-white rounded-lg shadow-lg">
+        <h2
+          id="question"
+          class="text-2xl font-bold text-red-500 mb-4 text-center"
+        >
+          Will you be my Valentine?
+          <img src="/images/please.gif" class="mx-auto" />
+        </h2>
+
+        <img
+          id="response-image"
+          src="/placeholder.svg?height=200&width=300"
+          alt="Response Image"
+          class="flex justify-center mb-4 rounded-lg hidden"
+        />
+        <div class="flex justify-center space-x-4 mt-6">
+          <button
+            id="yes-btn"
+            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors sh"
+          >
+            Yes
+          </button>
+          <button
+            id="no-btn"
+            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors shadow-lg"
+          >
+            No
+          </button>
+        </div>
+      </div>
+
+      <div id="itinerary" class="hidden mt-8 p-6 bg-white rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold text-red-500 mb-4">Yeheeeey!</h2>
+        <img src="/images/love.gif" />
+        <p class="text-xl mt-4">
+          Pero Ikaw magdedecide kung saan kakain HAHAHAHA jk
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const envelope = document.getElementById("envelope");
+      const flap = document.getElementById("flap");
+      const clickToOpen = document.getElementById("click-to-open");
+      const message = document.getElementById("message");
+      const question = document.getElementById("question");
+      const responseImage = document.getElementById("response-image");
+      const itinerary = document.getElementById("itinerary");
+      const yesBtn = document.getElementById("yes-btn");
+      const noBtn = document.getElementById("no-btn");
+      let isOpen = false;
+      let noCount = 0;
+
+      const noResponses = [
+        {
+          text: "Are you sure?",
+          image: "images/sad_penguin.gif",
+        },
+        {
+          text: "Why Not?",
+          image: "images/sad_bear.gif",
+        },
+        {
+          text: "Sige na please",
+          image: "images/sad_bunny.gif",
+        },
+      ];
+
+      envelope.addEventListener("click", () => {
+        if (!isOpen) {
+          flap.style.transform = "rotateX(180deg)";
+          clickToOpen.classList.add("hidden");
+          setTimeout(() => {
+            envelope.classList.add("hidden");
+            message.classList.remove("hidden");
+            message.classList.add("animate-fade-in");
+          }, 500);
+          isOpen = true;
+        }
+      });
+
+      yesBtn.addEventListener("click", () => {
+        message.classList.add("hidden");
+        itinerary.classList.remove("hidden");
+        itinerary.classList.add("animate-fade-in");
+      });
+
+      noBtn.addEventListener("click", () => {
+        noCount = (noCount + 1) % noResponses.length;
+        question.textContent = noResponses[noCount].text;
+        responseImage.src = noResponses[noCount].image;
+        responseImage.classList.remove("hidden");
+      });
+
+      // Add custom animation
+      tailwind.config = {
+        theme: {
+          extend: {
+            animation: {
+              "fade-in": "fadeIn 0.5s ease-out",
+              heartbeat: "heartbeat 1s infinite",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0" },
+                "100%": { opacity: "1" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </body>
+</html>
